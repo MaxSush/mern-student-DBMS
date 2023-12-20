@@ -1,25 +1,23 @@
-import express from 'express'
-import { createConnection } from 'mysql';
-import dotenv from 'dotenv'
-dotenv.config();
+import express from "express";
+import authRouter from "./routes/auth.route.js";
 
-const db = createConnection({
-    host: process.env.env_host,
-    user: process.env.env_user,
-    password: process.env.env_pass,
-    })
 
-db.connect((err) => { 
-    if (err) { 
-      console.log("Database Connection Failed !!!", err); 
-    } else { 
-      console.log("connected to Database"); 
-    } 
-});                                  
 const app = express();
 
+app.use(express.json());
 
 app.listen(3000, () => {
-    console.log('Server is running on port 3000 !!!');
-    }
-);
+  console.log("Server is running on port 3000 !!!");
+});
+
+app.use("/api/auth", authRouter);
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  return res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message
+  });
+});
