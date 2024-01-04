@@ -19,7 +19,6 @@ export const signin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const valid_user = await get_user(email);
-    console.log(valid_user);
     if (!valid_user) return next(errorHandler(404, "User does not exist"));
 
     const match = bcryptjs.compareSync(password, valid_user.password);
