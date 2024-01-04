@@ -1,10 +1,13 @@
 import express from "express";
 import authRouter from "./routes/auth.route.js";
+import helmet from "helmet";
 
 
-const app = express();
+var app = express();
 
 app.use(express.json());
+app.use(helmet.hidePoweredBy());
+
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000 !!!");
