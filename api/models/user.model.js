@@ -11,8 +11,13 @@ const pool = mysql.createPool({
 
 export async function create_user(username, email, password) {
     await pool.query(`
-    INSERT INTO test_login.user (username, email, password)
-    VALUES (?, ?, ?)
+    INSERT INTO test_login.user (id, username, email, password)
+    VALUES (UUID_TO_BIN(UUID()), ?, ?, ?)
     `, [username, email, password]
     )};
+
+export async function get_user(email) {
+    const [rows] = await pool.query("SELECT * FROM test_login.user WHERE email = ?", [email]);
+    return rows[0];
+}
 
